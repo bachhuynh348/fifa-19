@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIFA 19 Player Advisor - Tìm kiếm và Tư vấn Cầu thủ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-900 text-gray-100 flex flex-col min-h-screen">
+
+    <header class="bg-gray-800 p-4 shadow-lg sticky top-0 z-20">
+        <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center">
+            <a href="#" class="text-3xl font-extrabold text-blue-400 hover:text-blue-300 transition-colors duration-300 mb-2 sm:mb-0">
+                FIFA 19 Player Advisor
+            </a>
+            <div class="relative w-full sm:w-80">
+                <input
+                    type="text"
+                    id="playerSearchInput"
+                    placeholder="Tìm cầu thủ theo tên..."
+                    class="w-full bg-gray-700 text-white rounded-full py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                >
+                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+            </div>
+            <nav class="hidden md:flex space-x-6 ml-4">
+                <a href="#" class="text-gray-300 hover:text-white font-semibold transition-colors duration-300">Trang chủ</a>
+                <a href="#" class="text-gray-300 hover:text-white font-semibold transition-colors duration-300">So sánh</a>
+                <a href="#" class="text-gray-300 hover:text-white font-semibold transition-colors duration-300">Về chúng tôi</a>
+            </nav>
+            <button id="mobileMenuButton" class="md:hidden text-gray-300 hover:text-white">
+                <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+        <nav id="mobileMenu" class="md:hidden mt-4 space-y-2 text-center bg-gray-700 p-4 rounded-lg hidden">
+            <a href="#" class="block text-gray-200 hover:text-white font-semibold transition-colors duration-300">Trang chủ</a>
+            <a href="#" class="block text-gray-200 hover:text-white font-semibold transition-colors duration-300">So sánh</a>
+            <a href="#" class="block text-gray-200 hover:text-white font-semibold transition-colors duration-300">Về chúng tôi</a>
+        </nav>
+    </header>
+
+    <main class="flex-1 container mx-auto p-4 py-8 flex flex-col lg:flex-row gap-6">
+
+        <aside class="lg:w-1/4 bg-gray-800 p-6 rounded-lg shadow-lg h-fit sticky top-24">
+            <h2 class="text-xl font-bold text-white mb-4 border-b border-gray-700 pb-3">Bộ Lọc Cầu Thủ</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="positionFilter" class="block text-gray-300 text-sm font-semibold mb-1">Vị trí:</label>
+                    <select id="positionFilter" class="w-full bg-gray-700 text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Tất cả</option>
+                        <option value="GK">GK</option>
+                        <option value="CB">CB</option>
+                        <option value="LB">LB</option>
+                        <option value="RB">RB</option>
+                        <option value="CDM">CDM</option>
+                        <option value="CM">CM</option>
+                        <option value="CAM">CAM</option>
+                        <option value="LM">LM</option>
+                        <option value="RM">RM</option>
+                        <option value="LW">LW</option>
+                        <option value="RW">RW</option>
+                        <option value="ST">ST</option>
+                        <option value="CF">CF</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="overallFilter" class="block text-gray-300 text-sm font-semibold mb-1">Chỉ số OVR (min):</label>
+                    <input type="range" id="overallFilter" min="40" max="99" value="60" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer range-lg accent-blue-500">
+                    <span id="overallValue" class="block text-right text-gray-400 text-xs mt-1">60</span>
+                </div>
+                <div>
+                    <label for="potentialFilter" class="block text-gray-300 text-sm font-semibold mb-1">Tiềm năng POT (min):</label>
+                    <input type="range" id="potentialFilter" min="40" max="99" value="60" class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer range-lg accent-blue-500">
+                    <span id="potentialValue" class="block text-right text-gray-400 text-xs mt-1">60</span>
+                </div>
+                <button id="applyFiltersButton" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-md transition-colors duration-300">
+                    Áp dụng Bộ lọc
+                </button>
+            </div>
+        </aside>
+
+        <section id="playerListContainer" class="flex-1 bg-gray-800 p-6 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold text-white mb-6 border-b border-gray-700 pb-3">Các Cầu Thủ <span id="listTitle">Đề Xuất</span></h2>
+            <div id="playersGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                </div>
+            <div id="noResults" class="hidden text-center text-gray-400 text-lg mt-8">
+                Không tìm thấy cầu thủ nào phù hợp.
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-950 p-4 text-center text-gray-500 text-sm mt-auto shadow-inner">
+        <p>&copy; 2025 FIFA 19 Player Advisor. Tất cả quyền được bảo vệ.</p>
+        <p>Dữ liệu dựa trên FIFA 19.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
